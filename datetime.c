@@ -7,10 +7,9 @@ optionally be associated with a name, e.g., 'vernal equinox'
 (c)2005-2012 Kevin Boone
 =======================================================================*/
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <stdlib.h>
 #include <math.h>
 #include <stdint.h>
 #include "timeutil.h"

@@ -5,7 +5,7 @@ PointerList object defines a linked list of pointers
 (c)2005-2012 Kevin Boone
 =======================================================================*/
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "pointerlist.h"
 #include "defs.h"
 

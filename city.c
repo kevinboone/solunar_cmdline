@@ -6,7 +6,7 @@ Functions for finding latitude and longitude of cities
 =======================================================================*/
 #define _GNU_SOURCE
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include "city.h"
 #include "pointerlist.h"

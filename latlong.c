@@ -5,7 +5,7 @@ Definition of the LatLong object
 (c)2005-2012 Kevin Boone
 =======================================================================*/
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include "latlong.h"
 
