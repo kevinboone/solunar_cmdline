@@ -1,0 +1,341 @@
+<a href="software.html">&bull; Software</a>
+<a href="utility_corner.html">&bull; Utility corner</a>
+
+<h1>Solunar - a simple command-line utility for calculating Sun and Moon 
+rise and set, and related times</h1>
+
+Version 0.1.2
+<p/>
+
+<code>solunar</code> is a simple, command-line utility for rapidly displaying
+sun- and moon-related data such as sunset times and equinoxes. It also
+attempts to predict the combined influence of the sun and moon on wildlife
+activity. This process -- sometimes called <i>solunar scoring</i> 
+or <i>solunar forecasting</i> can be useful to people with an interest in
+fishing, wildlife photography, and birdwatching. 
+<code>solunar</code> builds under Cygwin on Windows, and 
+on most Linux platforms. 
+<code>solunar</code> produces output that can be readily parsed by scripts,
+although it is reasonably human-readable. The utility 
+contains a database of city locations, so locations can be specified
+by name, rather than latitude and longitude, although specific latitude
+and longitude can also be specified if required. 
+<p/>
+<code>Solunar</code> can also calculate the dates of lunar calendar
+events like Easter.
+
+<h3>Basic usage</h3>
+
+Get sun and moon rise and set times, etc., in London, on the current day:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+$ <b>solunar -c london</b>
+Selected city Europe/London
+Using location 51:30N,000:07W
+Date/time Mon May 21 13:52:52 2012 local
+
+Today
+                          Date: Monday 21 May 2012
+
+Sun
+                       Sunrise: 04:59
+                        Sunset: 20:52
+
+Moon
+                    Moon phase: 0.02 new
+                      Moonrise: 05:10
+                       Moonset: 21:36
+
+</pre> 
+
+
+Partial city names can be given, so long as the name is unambiguous. To see
+a full list of city names, run <code>solunar --cities</code>. Note that
+city names containing spaces are represented in <code>solunar</code> with
+underscores, as spaces confuse the shell; so <b>-c los_angeles</b>.
+<p/>
+Get sun and moon rise and set times, etc., in Paris, on January 1st, this year:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar -c paris -d "jan 1"</b>
+</pre>
+
+
+Get more detailed information: 
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar -f -c paris -d "jan 1"</b>
+</pre>
+
+
+Get brief information for location 51.0 degrees north, 1.5 degrees west,
+with times appropriate for the default timezone: 
+
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar -l 51.0,-1.5 -d "jan 1"</b>
+</pre>
+
+Note that southerly latitudes are negative, as are westerly longitudes.
+For more information on the accepted lat/long formats, 
+run <code>solunar -l help</code>.
+Note also that when latitude and longitude are given, the times displayed
+are in the default timezone, whether or not the specified point is in
+that timezone. If it isn't, you probably need to use the <code>-u</code>
+switch to get the times in UTC, then convert appropriately. In practice,
+the use of <code>-c</code> to set a city is more convenient, unless there
+really is no city within a hundred miles or so of the location.
+<p/>
+To get a list of equinoxes, etc., for the current year:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar --days</b>
+</pre>
+
+This also displays the dates of festivals like Easter which are derived from
+the lunar calendar. However, this dating of Easter is the conventional 
+Western one, and not all locations observe the same date, even when they 
+observe Easter.
+
+<p/>
+For a full list of command-line switches:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar --longhelp</b>
+</pre>
+
+<h3>Useful switches</h3>
+
+<b>-t, --twelvehour</b>: use 12-hour (AM/PM) format for times, rather than
+24-hour times.
+<p/>
+<b>-u, --utc</b>: use UTC (essentially GMT) times for input and output. 
+<p/>
+<b>-c, --cities</b>: list cities in database. 
+<p/>
+<b>-s, --solunar</b>: show solunar scoring information (see below). 
+<p/>
+<b>--datetime help</b>: show a summary of date/time input formats. 
+
+<h3>Solunar scoring</h3>
+
+The influence of the sun and moon on animal activity -- particularly 
+feeding activity -- is frequently noted, but not particularly well
+understood. It is widely accepted that many animals are most active
+at times near the full and new moons and, within a particular day,
+at dawn and dusk. It also seems to be the case that animal activity
+is greatest during moon transits (when the moon is directly overhead
+or directly 'underfoot') and, to a lesser extent, at moonrise and
+mmonset. The Sun's being at its highest point may also be significant, 
+because this is when the light and heat from the Sun is most likely
+to penetrate folliage and water, to warn the ground or river beds.
+<p/>
+It is often surmised that good times for
+birdwatching, fishing, etc., will be when the significant events related
+to the sun and moon coincide -- for example, when the moon is 
+directly overhead at dusk. There is little experimental data to support
+this surmise, but there is enough anecdotal evidence to make it interesting.
+<p/>
+To display solunar scoring information, use the <b>-s</b>
+or <b>--solunar</b> switches. An example of the output is as follows:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+$ <b>solunar -s -c london -t</b>
+Selected city Europe/London
+Using location 51:30N,000:07W
+Date/time Fri Sep  6 15:01:53 2013 local
+
+Today
+                          Date: Friday  6 September 2013
+
+Sun
+                       Sunrise:  6:20 am
+                        Sunset:  7:35 pm
+
+Moon
+                    Moon phase: 0.04 new
+                      Moonrise:  7:30 am
+                       Moonset:  7:35 pm
+
+Solunar
+              Moon phase score: 89%
+           Moon distance score: 56%
+     Solunar coincidence score: 59%
+            Solunar peak times:  6:45 am  1:15 pm  7:45 pm
+         Overall solunar score: 68%
+</pre>
+
+The <i>moon phase score</i> is a figure indicating how favourable the
+moon phase is to wildlife activity. This has a maximum of 100% at
+full and new moons, and declines gradually to (a completely arbitrary)
+25% at the moon quarters. The <i>moon distance score</i> estimates 
+the effect of the closeness of the moon to the earth, with a figure
+of 100% at perigee and (again, arbitrarily) 25% at apogee.
+<i>Solunar coincidence score</i> is a measure of the overlap between
+sun-related and moon-related events on the specified day. It is difficult
+to predict the upper limit of this figure; by experiment the algorithm's
+parameters have been adjusted to give a figure of 100% on days where there
+is the greatest observed overlap between sun and moon influence. On some
+days, this figure will be zero; this will happen when, for example, 
+sun rise/set/transit times are completely different from moon rise/set/transit
+times. The final figure, the overall score, is the unweighted average of
+the three previous scores.
+<p/>
+The <i>solunar peak times</i> shows the times, if any, of the peak
+overlap between sun and moon influence scores. This figure does not
+indicate the duration or intensity of the overlapping inflence, only
+its central time. The variation in duration and intensity can be
+considerable. For more detail, use the <b>-f</b> or <b>--full</b> 
+switches in conjuction with <b>--solunar</b>. This will display
+a chart of the Sun, Moon, and combined influence at 30-minute intervals
+for the day. From this the length and intensity of the combined 
+influence should be clear.
+<p/>
+Note that the levels of sun and moon influence in the chart, and used
+to derive the solunar peak times display, are relative to the maximums
+for that day. That is, the solunar coincidence score could high, and
+several peak times shown, but the day could still be inauspicious
+because the moon is at apogee (for example). Solunar coincdences
+might be of interest in predicting the level of wildlife activity 
+on a specified day, but that doesn't mean that there will be an
+overall high level of activity on that day. 
+<p/>
+
+
+<h3>Compiling</h3>
+
+The usual:
+
+<pre>
+% make
+# make install
+</pre>
+
+Note that <code>solunar</code> uses GNU-cc specific methods of handling
+time and date, and requires a Posix timezone database. Consequently it
+won't build under MinGW (and won't work even if it can be made to build).
+Interestingly it <i>will</i> build for Android using the Native Development
+Kit, and does seem to work correctly. Of course, that's only useful if you
+routinely use the command prompt on Android. <code>solunar</code> may build
+on other Posix-like plaforms, perhaps with changes to the Makefile. 
+
+
+<h3>Notes on the calculations</h3>
+
+With the exception of solunar scoring, the calculations are all based 
+on published algorithms, and I have checked
+them against reliable data sources so far as possible. There are
+potential sources of error that the program can't control, and some
+issues of interpretation.
+<p/>
+The most troublesome potential source of error is the system's timezone
+database. By default, results are worked out in UTC and then converted to
+the local time of the specified city. This relies on the system's own
+time and date being correct, and having a proper understanding of daylight 
+savings changes. In general, these issues seems to be handled reasonably well
+in modern Linux distributions, but there's not much <code>solunar</code> can
+do if the platform data is incorrect.
+<p/>
+Issues of interpretation include those relating to uncertainty about exactly 
+what position of the sun in the sky constitutes sunset.
+The sun is not a uniform disc, so there has to be a convention for the
+angle of zenith that we take as sunset. Most publications that give sunset
+times seem to take the Zenith angle as 90 degrees and 50 minutes, so 
+<code>solunar</code> does the same. However, the <code>--full</code> switch
+will make it display sunset according to other popular zeniths.
+In particular, civil twilight has a zenith 6 degrees below conventional
+sunset, and denotes the time before which outdoor activities are reasonably
+practicable. Nautical and astonomical twilight have zeniths 12 and 18 degrees
+below conventional sunset. In practice, many parts of the world will experience
+no astronomical sunset for at least part of the year. Some, of course,
+experience no sunset at all for part of the year. 
+<p/>
+Solunar scoring -- estimating the influence of sun and moon on wildlife
+activity -- is highly speculative, with little scientific justification.
+The algorithms used by <code>solunar</code> for this purpose are not
+based on any particular science -- there isn't any -- but have been 
+tuned to produce output that is broadly comparable with other published
+solunar tables.  
+
+<h3>Limitations</h3>
+
+<ul>
+<li>Events like equinoxes are displayed to the nearest minute but, in fact, 
+it's hard to get an accuracy of better than 30 minutes or so. These are
+annual events, after all. </li>
+<li>The --days switch produces a list for the current year. To get a list for a
+different year, you will need to specify a full date in that year, even though
+only the year part will be used. </li>
+<li>Times are displayed either as UTC, or local to the specified city. There is
+no way to get the times of events in one location relative to a different
+one. <code>solunar</code> is not intended 
+to be a general timezone converter.</li>
+<li>If a date is specified but no time, then the time is taken to be 2AM, local
+time. So, for example, the distance from the earth to the moon will be given at
+2AM on the specificed day. In practice, this seems highly unlikely to be
+significant. The use of 2AM, rather than midnight should reduce the likelihood
+of a nasty surprise 
+when selecting a day at the boundary between daylight
+savings changes: midnight local time might end up being in an unexpected
+day.</li>
+</ul>
+
+<h3>Legal</h3>
+
+<code>solunar</code> is copyright (c)2005-2014 Kevin Boone, and is released
+under the GNU Public Licence, version 2.0. That means, essentially, that
+you are welcome to use this program however you see fit, at your own risk, so
+long as you do not redistribute it without acknowledging the original
+author.
+<p/>
+The algorithms used in the program are published in various textbooks and, 
+so far as I know, there are no particular legal restrictions on their
+use and distribution. 
+
+<h3>Revision history</h3>
+
+<b>Version 0.1.0, May 2012</b><br/>
+First release, based on the original Java implementation of
+2005-2011.
+<p/>
+
+<b>Version 0.1.1, June 2013</b><br/>
+Fixed incorrect text label on moonset.</br>
+Fixed a problem with TZ environment handling, that led to a hugely incorrect
+timezone compensation on some platforms.</br/>
+Added 12-hour time display.</br>
+Added solunar scoring feature.</br>
+Fixed some minor memory leaks.</br>
+Corrected some errors in the documentation.
+<p/>
+
+<b>Version 0.1.2, June 2014</b><br/>
+
+Fixed a problem with timezone handling that caused the wrong day to be
+used between midnight and 1AM during daylight savings time.
+ 
+
+<h3>See also</h3>
+
+An <a href="README_android_suntimes.html">Android app</a> 
+is available which displays a subset
+of the data producted by this program, and is based on the same
+algorithms.
+<p>
+A command line version for Android is available from the
+ <a href="kbox2_downloads.html">KBOX downloads</a> page.
+
+
+
+
+<h3>Downloads</h3>
+
+<ul>
+<li><a href="solunar.exe">Windows (Cygwin) binary</a></li>
+<li><a href="solunar-0.1.2.tar.gz">Source code</a></li>
+</ul>
+
+
+
+
+
