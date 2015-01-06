@@ -204,7 +204,9 @@ overall high level of activity on that day.
 
 <h3>Compiling</h3>
 
-The usual:
+Source code is available from <a href="https://github.com/kevinboone/solunar_cmdline" target="_blank">github</a>. You can check out the latest version,
+or download and unpack a ZIP file.
+Then the usual:
 
 <pre>
 % make
@@ -216,8 +218,10 @@ time and date, and requires a Posix timezone database. Consequently it
 won't build under MinGW (and won't work even if it can be made to build).
 Interestingly it <i>will</i> build for Android using the Native Development
 Kit, and does seem to work correctly. Of course, that's only useful if you
-routinely use the command prompt on Android. <code>solunar</code> may build
+routinely use the command prompt on Android. For OS/X, please use the
+alternative <code>Makefile.OSX</code>. <code>solunar</code> may build
 on other Posix-like plaforms, perhaps with changes to the Makefile. 
+
 
 
 <h3>Notes on the calculations</h3>
@@ -322,8 +326,6 @@ is available which displays a subset
 of the data producted by this program, and is based on the same
 algorithms.
 <p>
-A command line version for Android is available from the
- <a href="kbox2_downloads.html">KBOX downloads</a> page.
 
 
 
@@ -331,8 +333,10 @@ A command line version for Android is available from the
 <h3>Downloads</h3>
 
 <ul>
-<li><a href="solunar.exe">Windows (Cygwin) binary</a></li>
-<li><a href="solunar-0.1.2.tar.gz">Source code</a></li>
+<li><a href="solunar.exe">Windows (Cygwin) binary of version 0.1.2</a></li>
+<li>A command line version for Android is available from the
+ <a href="kbox2_downloads.html">KBOX downloads</a> page</li>
+<li>Source code is available from <a href="https://github.com/kevinboone/solunar_cmdline" target="_blank">github</a></li>
 </ul>
 
 
