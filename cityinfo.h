@@ -19,8 +19,6 @@ City cities[] = {
 {
 "Antarctica/McMurdo","AQ",77,50,TRUE,166,36,FALSE},
 {
-"Antarctica/South_Pole","AQ",90,0,TRUE,0,0,FALSE},
-{
 "Antarctica/Rothera","AQ",67,34,TRUE,68,8,TRUE},
 {
 "Antarctica/Palmer","AQ",64,48,TRUE,64,6,TRUE},
@@ -36,6 +34,8 @@ City cities[] = {
 "Antarctica/DumontDUrville","AQ",66,40,TRUE,140,1,FALSE},
 {
 "Antarctica/Syowa","AQ",69,0,TRUE,39,35,FALSE},
+{
+"Antarctica/Troll","AQ",72,0,TRUE,2,32,FALSE},
 {
 "America/Argentina/Buenos_Aires","AR",34,36,TRUE,58,27,TRUE},
 {
@@ -113,7 +113,7 @@ City cities[] = {
 {
 "Africa/Bujumbura","BI",3,23,TRUE,29,22,FALSE},
 {
-"Africa/Porto","BJ",6,29,FALSE,2,37,FALSE},
+"Africa/Porto-Novo","BJ",6,29,FALSE,2,37,FALSE},
 {
 "America/St_Barthelemy","BL",17,53,FALSE,62,51,TRUE},
 {
@@ -177,9 +177,7 @@ City cities[] = {
 {
 "America/Goose_Bay","CA",53,20,FALSE,60,25,TRUE},
 {
-"America/Blanc","CA",51,25,FALSE,57,7,TRUE},
-{
-"America/Montreal","CA",45,31,FALSE,73,34,TRUE},
+"America/Blanc-Sablon","CA",51,25,FALSE,57,7,TRUE},
 {
 "America/Toronto","CA",43,39,FALSE,79,23,TRUE},
 {
@@ -247,13 +245,7 @@ City cities[] = {
 {
 "Asia/Shanghai","CN",31,14,FALSE,121,28,FALSE},
 {
-"Asia/Harbin","CN",45,45,FALSE,126,41,FALSE},
-{
-"Asia/Chongqing","CN",29,34,FALSE,106,35,FALSE},
-{
 "Asia/Urumqi","CN",43,48,FALSE,87,35,FALSE},
-{
-"Asia/Kashgar","CN",39,29,FALSE,75,59,FALSE},
 {
 "America/Bogota","CO",4,36,FALSE,74,5,TRUE},
 {
@@ -371,7 +363,7 @@ City cities[] = {
 {
 "Europe/Zagreb","HR",45,48,FALSE,15,58,FALSE},
 {
-"America/Port","HT",18,32,FALSE,72,20,TRUE},
+"America/Port-au-Prince","HT",18,32,FALSE,72,20,TRUE},
 {
 "Europe/Budapest","HU",47,30,FALSE,19,5,FALSE},
 {
@@ -385,7 +377,7 @@ City cities[] = {
 {
 "Europe/Dublin","IE",53,20,FALSE,6,15,TRUE},
 {
-"Asia/Jerusalem","IL",31,46,FALSE,35,14,FALSE},
+"Asia/Jerusalem","IL",31,46,FALSE,35,13,FALSE},
 {
 "Europe/Isle_of_Man","IM",54,9,FALSE,4,28,TRUE},
 {
@@ -403,7 +395,7 @@ City cities[] = {
 {
 "Europe/Jersey","JE",49,12,FALSE,2,7,TRUE},
 {
-"America/Jamaica","JM",18,0,FALSE,76,48,TRUE},
+"America/Jamaica","JM",17,58,FALSE,76,47,TRUE},
 {
 "Asia/Amman","JO",31,57,FALSE,35,56,FALSE},
 {
@@ -581,6 +573,8 @@ City cities[] = {
 {
 "Pacific/Port_Moresby","PG",9,30,TRUE,147,10,FALSE},
 {
+"Pacific/Bougainville","PG",6,13,TRUE,155,34,FALSE},
+{
 "Asia/Manila","PH",14,35,FALSE,121,0,FALSE},
 {
 "Asia/Karachi","PK",24,52,FALSE,67,3,FALSE},
@@ -617,7 +611,9 @@ City cities[] = {
 {
 "Europe/Kaliningrad","RU",54,43,FALSE,20,30,FALSE},
 {
-"Europe/Moscow","RU",55,45,FALSE,37,35,FALSE},
+"Europe/Moscow","RU",55,45,FALSE,37,37,FALSE},
+{
+"Europe/Simferopol","RU",44,57,FALSE,34,6,FALSE},
 {
 "Europe/Volgograd","RU",48,44,FALSE,44,25,FALSE},
 {
@@ -635,6 +631,8 @@ City cities[] = {
 {
 "Asia/Irkutsk","RU",52,16,FALSE,104,20,FALSE},
 {
+"Asia/Chita","RU",52,3,FALSE,113,28,FALSE},
+{
 "Asia/Yakutsk","RU",62,0,FALSE,129,40,FALSE},
 {
 "Asia/Khandyga","RU",62,39,FALSE,135,33,FALSE},
@@ -643,9 +641,11 @@ City cities[] = {
 {
 "Asia/Sakhalin","RU",46,58,FALSE,142,42,FALSE},
 {
-"Asia/Ust","RU",64,33,FALSE,143,13,FALSE},
+"Asia/Ust-Nera","RU",64,33,FALSE,143,13,FALSE},
 {
 "Asia/Magadan","RU",59,34,FALSE,150,48,FALSE},
+{
+"Asia/Srednekolymsk","RU",67,28,FALSE,153,43,FALSE},
 {
 "Asia/Kamchatka","RU",53,1,FALSE,158,39,FALSE},
 {
@@ -733,8 +733,6 @@ City cities[] = {
 {
 "Europe/Zaporozhye","UA",47,50,FALSE,35,10,FALSE},
 {
-"Europe/Simferopol","UA",44,57,FALSE,34,6,FALSE},
-{
 "Africa/Kampala","UG",0,19,FALSE,32,25,FALSE},
 {
 "Pacific/Johnston","UM",16,45,FALSE,169,31,TRUE},
@@ -781,11 +779,11 @@ City cities[] = {
 {
 "America/Boise","US",43,36,FALSE,116,12,TRUE},
 {
-"America/Shiprock","US",36,47,FALSE,108,41,TRUE},
-{
 "America/Phoenix","US",33,26,FALSE,112,4,TRUE},
 {
 "America/Los_Angeles","US",34,3,FALSE,118,14,TRUE},
+{
+"America/Metlakatla","US",55,7,FALSE,131,34,TRUE},
 {
 "America/Anchorage","US",61,13,FALSE,149,54,TRUE},
 {
@@ -798,8 +796,6 @@ City cities[] = {
 "America/Nome","US",64,30,FALSE,165,24,TRUE},
 {
 "America/Adak","US",51,52,FALSE,176,39,TRUE},
-{
-"America/Metlakatla","US",55,7,FALSE,131,34,TRUE},
 {
 "Pacific/Honolulu","US",21,18,FALSE,157,51,TRUE},
 {

@@ -4,7 +4,7 @@
 <h1>Solunar - a simple command-line utility for calculating Sun and Moon 
 rise and set, and related times</h1>
 
-Version 0.1.2
+Version 0.1.2a
 <p/>
 
 <code>solunar</code> is a simple, command-line utility for rapidly displaying
@@ -69,7 +69,7 @@ Get more detailed information:
 
 
 Get brief information for location 51.0 degrees north, 1.5 degrees west,
-with times appropriate for the default timezone: 
+with times appropriate for the default timezone (see note below): 
 
 
 <pre style="background-color: #FFFFD0; padding: 5px">
@@ -79,12 +79,34 @@ with times appropriate for the default timezone:
 Note that southerly latitudes are negative, as are westerly longitudes.
 For more information on the accepted lat/long formats, 
 run <code>solunar -l help</code>.
-Note also that when latitude and longitude are given, the times displayed
-are in the default timezone, whether or not the specified point is in
-that timezone. If it isn't, you probably need to use the <code>-u</code>
-switch to get the times in UTC, then convert appropriately. In practice,
-the use of <code>-c</code> to set a city is more convenient, unless there
-really is no city within a hundred miles or so of the location.
+<p/>
+When a city name is given using the <code>-c</code> switch, the times
+displayed are local to the timezone in which that city is located.
+When latitude and longitude are given alone, then times displayed
+are in the <i>default timezone</i>, whether or not the specified point is in
+that timezone -- this may well be unhelpful if you need to know the
+times local to that location, when you are in another location. 
+Solunar has no general way to work out
+what timezone a specified lat/long location is in. To get local times
+for a lat/long location, give the  
+<code>-c</code> switch along with <code>-l</code>, naming a city  
+in the required timezone.  For
+example, the city database has no entry for Washington, DC. The following 
+command specifies the Washington DC lat/long coordinates, but displays
+the results for the default timezone:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar -l 38.90,-77.03</b>
+</pre>
+
+The same command additionally using the name of a nearby city (at least, 
+close enough to be in the same timezone) displays 
+local times for Washington, DC:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar -l 38.90,-77.03 -c New_York</b>
+</pre>
+
 <p/>
 To get a list of equinoxes, etc., for the current year:
 
@@ -272,7 +294,8 @@ different year, you will need to specify a full date in that year, even though
 only the year part will be used. </li>
 <li>Times are displayed either as UTC, or local to the specified city. There is
 no way to get the times of events in one location relative to a different
-one. <code>solunar</code> is not intended 
+one, except by specifying lat/long coordinates. 
+<code>solunar</code> is not intended 
 to be a general timezone converter.</li>
 <li>If a date is specified but no time, then the time is taken to be 2AM, local
 time. So, for example, the distance from the earth to the moon will be given at
@@ -286,7 +309,7 @@ day.</li>
 
 <h3>Legal</h3>
 
-<code>solunar</code> is copyright (c)2005-2014 Kevin Boone, and is released
+<code>solunar</code> is copyright (c)2005-2015 Kevin Boone, and is released
 under the GNU Public Licence, version 2.0. That means, essentially, that
 you are welcome to use this program however you see fit, at your own risk, so
 long as you do not redistribute it without acknowledging the original
@@ -319,6 +342,11 @@ Fixed a problem with timezone handling that caused the wrong day to be
 used between midnight and 1AM during daylight savings time.
  
 
+<b>Version 0.1.2a, March 2015</b><br/>
+
+Fixed bug in name parsing in parse_zoneinfo.pl (thanks to Cezary Kruk)
+ 
+
 <h3>See also</h3>
 
 An <a href="README_android_suntimes.html">Android app</a> 
@@ -332,10 +360,13 @@ algorithms.
 
 <h3>Downloads</h3>
 
+Please note that the latest source code may be more recent than the
+pre-built binaries.
+
 <ul>
 <li><a href="solunar.exe">Windows (Cygwin) binary of version 0.1.2</a></li>
 <li>A command line version for Android is available from the
- <a href="kbox2_downloads.html">KBOX downloads</a> page</li>
+ <a href="kbox3_downloads.html">KBOX downloads</a> page</li>
 <li>Source code is available from <a href="https://github.com/kevinboone/solunar_cmdline" target="_blank">github</a></li>
 </ul>
 

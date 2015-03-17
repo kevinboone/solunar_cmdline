@@ -15,7 +15,7 @@ while (my $line=<IN>)
   chomp ($line);
   if ($line =~ /^#/) { next; }
 #print ("line=$line\n");
-  $line =~ /([A-Z][A-Z])\s+([0-9+-]+)\s+([a-zA-Z\/_]+)/;
+  $line =~ /([A-Z][A-Z])\s+([0-9+-]+)\s+([-a-zA-Z\/_]+)/;
   my $country = $1;
   my $latlong= $2;
   my $name= $3;

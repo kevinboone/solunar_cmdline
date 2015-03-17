@@ -446,7 +446,7 @@ int main (int argc, char **argv)
 
   if (opt_version)
     {
-    printf ("solunar version %s\n(c)2005-2014 Kevin Boone\n", VERSION);
+    printf ("solunar version %s\n(c)2005-2015 Kevin Boone\n", VERSION);
     exit (0);
     }
   
