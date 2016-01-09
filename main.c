@@ -124,7 +124,7 @@ print_sunrise_time
 =======================================================================*/
 void print_sunrise_time (char *text, double zenith, BOOL opt_utc, 
    const char *tz, const LatLong *latlong, const DateTime *date, 
-   BOOL twelve_hour)
+   BOOL twelve_hour, BOOL opt_syslocal)
   {
   char *s;
   Error *e = NULL;
@@ -137,10 +137,10 @@ void print_sunrise_time (char *text, double zenith, BOOL opt_utc,
     }
   else
     {
-    if (opt_utc)
-      {
+    if (opt_syslocal)
+      s = DateTime_time_to_string_syslocal (sunrise, twelve_hour);
+    else if (opt_utc)
       s = DateTime_time_to_string_UTC (sunrise, twelve_hour);
-      }
     else
       s = DateTime_time_to_string_local (sunrise, tz, twelve_hour);
     DateTime_free (sunrise);
@@ -321,6 +321,7 @@ int main (int argc, char **argv)
   static BOOL opt_cities = FALSE;
   static BOOL opt_quiet = FALSE;
   static BOOL opt_utc = FALSE;
+  static BOOL opt_syslocal = FALSE;
   static BOOL opt_full = FALSE;
   static BOOL opt_list_named_days = FALSE;
   static BOOL opt_twelvehour = FALSE;
@@ -349,6 +350,7 @@ int main (int argc, char **argv)
     {"longhelp", no_argument, &opt_longhelp, 0},
     {"quiet", no_argument, &opt_quiet, 'q'},
     {"utc", no_argument, &opt_utc, 'v'},
+    {"syslocal", no_argument, &opt_syslocal, 'y'},
     {"twelvehour", no_argument, &opt_twelvehour, 't'},
     {"version", no_argument, &opt_version, 'v'},
     {"days", no_argument, &opt_list_named_days, 0},
@@ -359,7 +361,7 @@ int main (int argc, char **argv)
   while (1)
     {
     int option_index = 0;
-    int opt = getopt_long (argc, argv, "?hvc:l:d:ufqts", long_options, 
+    int opt = getopt_long (argc, argv, "?hvc:l:d:ufqtsy", long_options, 
       &option_index);
     if (opt == -1) break;
     switch (opt)
@@ -373,6 +375,10 @@ int main (int argc, char **argv)
         if (strcmp (long_options[option_index].name, "utc") == 0)
           {
           opt_utc = TRUE;
+          }
+        if (strcmp (long_options[option_index].name, "syslocal") == 0)
+          {
+          opt_syslocal = TRUE;
           }
         if (strcmp (long_options[option_index].name, "days") == 0)
           {
@@ -438,6 +444,9 @@ int main (int argc, char **argv)
       case 'q':
         opt_quiet = TRUE;
         break;
+      case 'y':
+        opt_syslocal = TRUE;
+        break;
       case 's':
         opt_show_solunar = TRUE;
         break;
@@ -466,6 +475,15 @@ int main (int argc, char **argv)
     {
     print_long_usage(argv[0]);
     exit (0);
+    }
+
+  if (opt_syslocal && opt_utc)
+    {
+    fprintf (stderr, 
+      "'utc' and 'syslocal' cannot be specified at the same time;\n");
+    fprintf (stderr, 
+      "'%s --longhelp' for usage\n", argv[0]);
+    exit (-1);
     }
   
   if (city)
@@ -595,11 +613,21 @@ int main (int argc, char **argv)
   if (!opt_quiet)
     {
     char *s;
-    if (opt_utc)
+    if (opt_syslocal || !tz)
+      {
+      s = DateTime_to_string_syslocal (datetimeObj);
+      printf ("Date/time %s %s\n", s, "syslocal");
+      }
+    else if (opt_utc)
+      {
       s = DateTime_to_string_UTC (datetimeObj);
+      printf ("Date/time %s %s\n", s, "UTC");
+      }
     else
+      {
       s = DateTime_to_string_local (datetimeObj, tz);
-    printf ("Date/time %s %s\n", s, opt_utc?"UTC":"local");
+      printf ("Date/time %s %s\n", s, "local");
+      }
     free (s);
     printf ("\n");
     }
@@ -689,7 +717,7 @@ int main (int argc, char **argv)
     printf ("Sun\n");
     print_sunrise_time ("                       Sunrise: ", 
       SUNTIMES_DEFAULT_ZENITH, opt_utc, tz, 
-      workingLatlong, datetimeObj, twelve_hour); 
+      workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
     print_sunset_time ("                        Sunset: ", 
       SUNTIMES_DEFAULT_ZENITH, opt_utc, tz, 
       workingLatlong, datetimeObj, twelve_hour); 
@@ -700,20 +728,20 @@ int main (int argc, char **argv)
 
       print_sunrise_time ("         Civil twilight starts: ", 
         SUNTIMES_CIVIL_TWILIGHT, 
-        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
+        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       print_sunset_time ("           Civil twilight ends: ", 
         SUNTIMES_NAUTICAL_TWILIGHT, 
         opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
 
       print_sunrise_time ("      Nautical twilight starts: ", 
         SUNTIMES_NAUTICAL_TWILIGHT, 
-        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
+        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       print_sunset_time ("        Nautical twilight ends: ", 
         SUNTIMES_NAUTICAL_TWILIGHT, 
         opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
       print_sunrise_time ("  Astronomical twilight starts: ", 
         SUNTIMES_ASTRONOMICAL_TWILIGHT, 
-        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
+        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       print_sunset_time ("    Astronomical twilight ends: ", 
         SUNTIMES_ASTRONOMICAL_TWILIGHT, 
         opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 

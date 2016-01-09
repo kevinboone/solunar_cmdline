@@ -300,6 +300,18 @@ char *DateTime_to_string_local (const DateTime *self, const char *tz)
 
 
 /*=======================================================================
+DateTime_to_string_syslocal
+Caller must free string
+=======================================================================*/
+char *DateTime_to_string_syslocal (const DateTime *self)
+  {
+  char *s = ctime (&(self->priv->utime));
+  if (s[strlen(s) - 1] == 10) s[strlen(s) - 1] = 0;
+  return strdup (s);
+  }
+
+
+/*=======================================================================
 DateTime_to_string_utc
 Caller must free string
 =======================================================================*/
@@ -402,6 +414,26 @@ char *DateTime_time_to_string_local (const DateTime *self, const char *tz,
       }
     //unsetenv ("TZ");
     }
+  return strdup (s);
+  }
+
+
+/*=======================================================================
+DateTime_time_to_string_syslocal
+Caller must free string
+=======================================================================*/
+char *DateTime_time_to_string_syslocal (const DateTime *self, BOOL twelve_hour)
+  {
+  struct tm *tm = localtime(&(self->priv->utime));
+  char s[20];
+  if (twelve_hour)
+    {
+    snprintf (s, sizeof (s), "%2d:%02d %s", 
+      tm->tm_hour <= 12  ? tm->tm_hour : tm->tm_hour - 12 , tm->tm_min,
+      tm->tm_hour >= 12 ? "pm": "am");
+    }
+  else
+    snprintf (s, sizeof (s), "%02d:%02d", tm->tm_hour, tm->tm_min);
   return strdup (s);
   }
 

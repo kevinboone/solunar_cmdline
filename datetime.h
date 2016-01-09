@@ -27,6 +27,8 @@ DateTime *DateTime_new_julian (double jd);
 
 char *DateTime_to_string_local (const DateTime *self, const char *tz);
 
+char *DateTime_to_string_syslocal (const DateTime *self);
+
 char *DateTime_to_string_UTC (const DateTime *self);
 
 int DateTime_get_day_of_year (const DateTime *self, const char *tz);
@@ -38,6 +40,9 @@ DateTime *DateTime_clone (const DateTime *other);
 char *DateTime_time_to_string_UTC (const DateTime *self, BOOL twelve_hour);
 
 char *DateTime_time_to_string_local (const DateTime *self, const char *tz, 
+    BOOL twelve_hour);
+
+char *DateTime_time_to_string_syslocal (const DateTime *self, 
     BOOL twelve_hour);
 
 double DateTime_get_julian_date (const DateTime *self);
