@@ -154,7 +154,8 @@ void print_sunrise_time (char *text, double zenith, BOOL opt_utc,
 print_sunset_time
 =======================================================================*/
 void print_sunset_time (char *text, double zenith, BOOL opt_utc, const char *tz,
-    const LatLong *latlong, const DateTime *date, BOOL twelve_hour)
+    const LatLong *latlong, const DateTime *date, BOOL twelve_hour, 
+    BOOL opt_syslocal)
   {
   char *s;
   Error *e = NULL;
@@ -167,7 +168,9 @@ void print_sunset_time (char *text, double zenith, BOOL opt_utc, const char *tz,
     }
   else
     {
-    if (opt_utc)
+    if (opt_syslocal)
+      s = DateTime_time_to_string_syslocal (sunrise, twelve_hour);
+    else if (opt_utc)
       s = DateTime_time_to_string_UTC (sunrise, twelve_hour);
     else
       s = DateTime_time_to_string_local (sunrise, tz, twelve_hour);
@@ -182,7 +185,8 @@ void print_sunset_time (char *text, double zenith, BOOL opt_utc, const char *tz,
 print_high_noon_time
 =======================================================================*/
 void print_high_noon_time (char *text, BOOL opt_utc, const char *tz,
-    const LatLong *latlong, const DateTime *date, BOOL twelve_hour)
+    const LatLong *latlong, const DateTime *date, BOOL twelve_hour, 
+    BOOL opt_syslocal)
   {
   char *s;
   Error *e = NULL;
@@ -194,7 +198,9 @@ void print_high_noon_time (char *text, BOOL opt_utc, const char *tz,
     }
   else
     {
-    if (opt_utc)
+    if (opt_syslocal)
+      s = DateTime_time_to_string_syslocal (sunrise, twelve_hour);
+    else if (opt_utc)
       s = DateTime_time_to_string_UTC (sunrise, twelve_hour);
     else
       s = DateTime_time_to_string_local (sunrise, tz, twelve_hour);
@@ -720,31 +726,31 @@ int main (int argc, char **argv)
       workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
     print_sunset_time ("                        Sunset: ", 
       SUNTIMES_DEFAULT_ZENITH, opt_utc, tz, 
-      workingLatlong, datetimeObj, twelve_hour); 
+      workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
     if (opt_full)
       {
       print_high_noon_time ("                     High noon: ", 
-        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
+        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
 
       print_sunrise_time ("         Civil twilight starts: ", 
         SUNTIMES_CIVIL_TWILIGHT, 
         opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       print_sunset_time ("           Civil twilight ends: ", 
         SUNTIMES_NAUTICAL_TWILIGHT, 
-        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
+        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
 
       print_sunrise_time ("      Nautical twilight starts: ", 
         SUNTIMES_NAUTICAL_TWILIGHT, 
         opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       print_sunset_time ("        Nautical twilight ends: ", 
         SUNTIMES_NAUTICAL_TWILIGHT, 
-        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
+        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       print_sunrise_time ("  Astronomical twilight starts: ", 
         SUNTIMES_ASTRONOMICAL_TWILIGHT, 
         opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       print_sunset_time ("    Astronomical twilight ends: ", 
         SUNTIMES_ASTRONOMICAL_TWILIGHT, 
-        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour); 
+        opt_utc, tz, workingLatlong, datetimeObj, twelve_hour, opt_syslocal); 
       }
     printf ("\n");
     }
@@ -804,7 +810,9 @@ int main (int argc, char **argv)
       for (i = 0; i < nevents; i++)
         {
         char *s;
-        if (opt_utc)
+        if (opt_syslocal)
+          s = DateTime_time_to_string_syslocal (events[i], twelve_hour);
+        else if (opt_utc)
           s = DateTime_time_to_string_UTC (events[i], twelve_hour);
         else
           s = DateTime_time_to_string_local (events[i], tz, twelve_hour);
@@ -1012,8 +1020,16 @@ int main (int argc, char **argv)
       int i;
       for (i = 0; i < num_solunar_periods; i++)
         {
-        char *s = DateTime_time_to_string_local (solunar_mid[i], 
-          tz, opt_twelvehour);
+        char *s;
+        if (opt_syslocal)
+          s = DateTime_time_to_string_syslocal (solunar_mid[i], 
+            opt_twelvehour);
+        else if (opt_utc)
+          s = DateTime_time_to_string_UTC (solunar_mid[i], 
+            opt_twelvehour);
+        else 
+          s = DateTime_time_to_string_local (solunar_mid[i], 
+            tz, opt_twelvehour);
         printf (" %s", s);
         free (s);
         }
