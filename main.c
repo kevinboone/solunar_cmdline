@@ -619,15 +619,15 @@ int main (int argc, char **argv)
   if (!opt_quiet)
     {
     char *s;
-    if (opt_syslocal || !tz)
-      {
-      s = DateTime_to_string_syslocal (datetimeObj);
-      printf ("Date/time %s %s\n", s, "syslocal");
-      }
-    else if (opt_utc)
+    if (opt_utc)
       {
       s = DateTime_to_string_UTC (datetimeObj);
       printf ("Date/time %s %s\n", s, "UTC");
+      }
+    else if (opt_syslocal || !tz)
+      {
+      s = DateTime_to_string_syslocal (datetimeObj);
+      printf ("Date/time %s %s\n", s, "syslocal");
       }
     else
       {
@@ -797,7 +797,9 @@ int main (int argc, char **argv)
       for (i = 0; i < nevents; i++)
         {
         char *s;
-        if (opt_utc)
+        if (opt_syslocal)
+          s = DateTime_time_to_string_syslocal (events[i], twelve_hour);
+        else if (opt_utc)
           s = DateTime_time_to_string_UTC (events[i], twelve_hour);
         else
           s = DateTime_time_to_string_local (events[i], tz, twelve_hour);

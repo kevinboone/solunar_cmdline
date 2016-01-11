@@ -25,8 +25,24 @@ typedef struct _DateTimePriv
 
 
 /*=======================================================================
+my_setenv
+A variant of setenv() that allows a NULL value to call unsetenv; 
+setenv() itself does not accept NULL as a value
+=======================================================================*/
+void my_setenv (const char *name, const char *value, BOOL dummy)
+  {
+  //printf ("name=%s value=%s\n", name, value); 
+  if (value)
+    setenv (name, value, 1);  
+  else
+    unsetenv (name);
+  }
+
+
+/*=======================================================================
 getenv_dup
-Gets a copy of an environment string. Caller must free it.
+Gets a copy of an environment string. Caller must free it. Note that the
+return value might be null (which cannot be freed)
 =======================================================================*/
 static char *getenv_dup (const char *env)
   {
@@ -178,19 +194,19 @@ DateTime *DateTime_new_parse (const char *str, Error **error, const char *tz,
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
   utime = mktime (&tm);
   if (tz)
     {
-    if (oldtz)
+    ////if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
 
   return DateTime_new_utime (utime);
@@ -221,7 +237,7 @@ DateTime *DateTime_new_dmy_name (int day, int month, int year,
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
   tm.tm_mday = day;
@@ -234,13 +250,13 @@ DateTime *DateTime_new_dmy_name (int day, int month, int year,
   utime = mktime (&tm);
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
 
   DateTime *r = DateTime_new_utime (utime);
@@ -280,20 +296,20 @@ char *DateTime_to_string_local (const DateTime *self, const char *tz)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
   char *s = ctime (&(self->priv->utime));
   if (s[strlen(s) - 1] == 10) s[strlen(s) - 1] = 0;
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
   return strdup (s);
   }
@@ -322,20 +338,20 @@ char *DateTime_to_string_UTC (const DateTime *self)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
   char *s = ctime (&(self->priv->utime));
   if (s[strlen(s) - 1] == 10) s[strlen(s) - 1] = 0;
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
   return strdup (s);
   }
@@ -352,7 +368,7 @@ char *DateTime_time_to_string_UTC (const DateTime *self, BOOL twelve_hour)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
   struct tm *tm = localtime(&(self->priv->utime));
@@ -368,13 +384,13 @@ char *DateTime_time_to_string_UTC (const DateTime *self, BOOL twelve_hour)
     snprintf (s, sizeof (s), "%02d:%02d", tm->tm_hour, tm->tm_min);
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
   return strdup (s);
   }
@@ -391,7 +407,7 @@ char *DateTime_time_to_string_local (const DateTime *self, const char *tz,
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
   struct tm *tm = localtime(&(self->priv->utime));
@@ -406,13 +422,13 @@ char *DateTime_time_to_string_local (const DateTime *self, const char *tz,
     snprintf (s, sizeof (s), "%02d:%02d", tm->tm_hour, tm->tm_min);
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
   return strdup (s);
   }
@@ -463,19 +479,19 @@ int DateTime_get_day_of_year (const DateTime *self, const char *tz)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
   memcpy (&tm, gmtime (&self->priv->utime), sizeof (struct tm));
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
   return tm.tm_yday + 1;
   }
@@ -501,7 +517,7 @@ void DateTime_set_time_hours_fraction (DateTime *self, double hours)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
 
@@ -509,13 +525,12 @@ void DateTime_set_time_hours_fraction (DateTime *self, double hours)
 
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
     }
 
   }
@@ -560,7 +575,7 @@ DateTime *DateTime_get_day_start (const DateTime *self)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
 
@@ -568,13 +583,13 @@ DateTime *DateTime_get_day_start (const DateTime *self)
 
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
 
   return DateTime_new_utime (utime);
@@ -599,7 +614,7 @@ DateTime *DateTime_get_day_end (const DateTime *self)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
 
@@ -609,11 +624,11 @@ DateTime *DateTime_get_day_end (const DateTime *self)
     {
     if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
 
   return DateTime_new_utime (utime);
@@ -652,7 +667,7 @@ void DateTime_add_days (DateTime *self, int days, const char *tz, BOOL utc)
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
 
@@ -668,13 +683,13 @@ void DateTime_add_days (DateTime *self, int days, const char *tz, BOOL utc)
 
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
 
   }
@@ -730,7 +745,7 @@ void DateTime_get_ymdhms (const DateTime *self, int *year, int *month, int *day,
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
 
@@ -745,13 +760,13 @@ void DateTime_get_ymdhms (const DateTime *self, int *year, int *month, int *day,
 
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
   }
 
@@ -770,7 +785,7 @@ DateTime *DateTime_get_jan_first (const DateTime *self,
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
-    setenv ("TZ", tz, 1);
+    my_setenv ("TZ", tz, 1);
     tzset ();
     }
 
@@ -787,13 +802,13 @@ DateTime *DateTime_get_jan_first (const DateTime *self,
 
   if (tz)
     {
-    if (oldtz)
+    //if (oldtz)
       {
-      setenv ("TZ", oldtz, 1);
-      free (oldtz);
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
       tzset ();
       }
-    //unsetenv ("TZ");
+    //unmy_setenv ("TZ");
     }
 
   return r;
