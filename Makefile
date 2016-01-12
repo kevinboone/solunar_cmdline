@@ -3,7 +3,7 @@
 
 all: solunar
 
-VERSION=0.1.2a
+VERSION=0.1.3
 
 CFLAGS=-Wall -DVERSION=\"$(VERSION)\" -g 
 

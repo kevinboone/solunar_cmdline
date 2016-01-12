@@ -4,7 +4,7 @@
 <h1>Solunar - a simple command-line utility for calculating Sun and Moon 
 rise and set, and related times</h1>
 
-Version 0.1.2a
+Version 0.1.3
 <p/>
 
 <code>solunar</code> is a simple, command-line utility for rapidly displaying
@@ -52,7 +52,8 @@ Moon
 Partial city names can be given, so long as the name is unambiguous. To see
 a full list of city names, run <code>solunar --cities</code>. Note that
 city names containing spaces are represented in <code>solunar</code> with
-underscores, as spaces confuse the shell; so <b>-c los_angeles</b>.
+underscores, as spaces confuse the shell; so <b>-c los_angeles</b> 
+(but, int fact, 'angeles' will work, since it is unambiguous)
 <p/>
 Get sun and moon rise and set times, etc., in Paris, on January 1st, this year:
 
@@ -83,10 +84,13 @@ run <code>solunar -l help</code>.
 When a city name is given using the <code>-c</code> switch, the times
 displayed are local to the timezone in which that city is located.
 When latitude and longitude are given alone, then times displayed
-are in the <i>default timezone</i>, whether or not the specified point is in
-that timezone -- this may well be unhelpful if you need to know the
-times local to that location, when you are in another location. 
-Solunar has no general way to work out
+are in the <i>default timezone</i>. The defauult timezone will either be
+UTC (GMT), or the timezone set in the TZ environment variable, if there is one. 
+The default timezone will be used whether or not the specified location
+happens to be in that timezone --
+this may well be unhelpful if you need to know the
+times local to that location, when you are in another, different location. 
+<code>solunar</code> has no general way to work out
 what timezone a specified lat/long location is in. To get local times
 for a lat/long location, give the  
 <code>-c</code> switch along with <code>-l</code>, naming a city  
@@ -106,6 +110,17 @@ local times for Washington, DC:
 <pre style="background-color: #FFFFD0; padding: 5px">
 <b>solunar -l 38.90,-77.03 -c New_York</b>
 </pre>
+<p/>
+If you know that the specified lat/long location is in the same timezone
+as your computer (and assuming that the computer is set up correctly)
+you can display times relative to the system local time:
+
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>solunar -l 38.90,-77.03 --syslocal</b>
+</pre>
+
+You can also force the use of GMT/UTC times using the <code>--utc</code>
+switch.
 
 <p/>
 To get a list of equinoxes, etc., for the current year:
@@ -132,6 +147,8 @@ For a full list of command-line switches:
 24-hour times.
 <p/>
 <b>-u, --utc</b>: use UTC (essentially GMT) times for input and output. 
+<p/>
+<b>-y, --syslocal</b>: use system local times for input and output. 
 <p/>
 <b>-c, --cities</b>: list cities in database. 
 <p/>
@@ -214,7 +231,7 @@ for the day. From this the length and intensity of the combined
 influence should be clear.
 <p/>
 Note that the levels of sun and moon influence in the chart, and used
-to derive the solunar peak times display, are relative to the maximums
+to derive the solunar peak times display, are relative to the maxima
 for that day. That is, the solunar coincidence score could high, and
 several peak times shown, but the day could still be inauspicious
 because the moon is at apogee (for example). Solunar coincdences
@@ -222,7 +239,9 @@ might be of interest in predicting the level of wildlife activity
 on a specified day, but that doesn't mean that there will be an
 overall high level of activity on that day. 
 <p/>
-
+There is little science to solunar scoring. The program's algorithm
+has been tuned to give results that are broadly comparable with
+several published almanacs that claim to offer such scoring.
 
 <h3>Compiling</h3>
 
@@ -347,6 +366,10 @@ used between midnight and 1AM during daylight savings time.
 Fixed bug in name parsing in parse_zoneinfo.pl (thanks to Cezary Kruk)
  
 
+<b>Version 0.1.3, January 2016</b><br/>
+
+Added <code>--syslocal</code> switch; various bug fixes.
+
 <h3>See also</h3>
 
 An <a href="README_android_suntimes.html">Android app</a> 
@@ -356,12 +379,14 @@ algorithms.
 <p>
 
 
-
-
 <h3>Downloads</h3>
 
-Please note that the latest source code may be more recent than the
-pre-built binaries.
+<code>solunar</code> is already in the repositories for various 
+Linux distributions. Where that is not the case, it is easy to build from
+source.
+Please note that the latest source will nearly alway be 
+more recent than any pre-built binaries, and include the latest bug
+fixes, some of which are important.
 
 <ul>
 <li><a href="solunar.exe">Windows (Cygwin) binary of version 0.1.2</a></li>

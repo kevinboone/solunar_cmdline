@@ -1,7 +1,7 @@
 /*=======================================================================
 solunar
 main.c
-(c)2005-2012 Kevin Boone
+Copyright (c)2005-2012 Kevin Boone
 =======================================================================*/
 #include <stdio.h>
 #include <getopt.h>
@@ -65,6 +65,7 @@ void print_long_usage(const char *argv0)
   printf ("  -t, --twelvehour               use AM/PM times\n");
   printf ("  -u, --utc                      times and dates are UTC\n");
   printf ("  -v, --version                  print version\n");
+  printf ("  -y, --syslocal                 times and dates are system local\n");
   }
 
 /*=======================================================================
@@ -461,7 +462,7 @@ int main (int argc, char **argv)
 
   if (opt_version)
     {
-    printf ("solunar version %s\n(c)2005-2015 Kevin Boone\n", VERSION);
+    printf ("solunar version %s\nCopyright (c)2005-2016 Kevin Boone\n", VERSION);
     exit (0);
     }
   
