@@ -271,7 +271,7 @@ void list_named_days (PointerList *day_events, const DateTime *start,
         {
         int j;
         const char *name = DateTime_get_name (event);
-        char *s = DateTime_date_to_string (event);
+        char *s = DateTime_date_to_string_syslocal (event);
         printf (s);
         putchar (' ');
         for (j = strlen (s); j < 26; j++) 
@@ -654,6 +654,8 @@ int main (int argc, char **argv)
     DateTime_free (jan_first);
     exit (0);
     }
+ 
+  DateTime *start = DateTime_get_day_start (datetimeObj, tz);
 
   if (show_today)
     {
@@ -665,8 +667,16 @@ int main (int argc, char **argv)
       free_day_events (day_events);
       exit (-1);
       }
+
     printf ("Today\n");
-    char *s = DateTime_date_to_string (datetimeObj);
+    char *s;
+    if (opt_syslocal)
+      s = DateTime_date_to_string_syslocal (start);
+    else if (opt_utc)
+      s = DateTime_date_to_string_UTC (start);
+    else
+      s = DateTime_date_to_string_local (start, tz);
+    //char *s = DateTime_date_to_string (start);
     printf ("                          Date: %s\n", s);
     free (s);
 
@@ -790,8 +800,9 @@ int main (int argc, char **argv)
         exit (-1);
         }
       int i, nevents = 0;
-      DateTime *start = DateTime_get_day_start (datetimeObj);
-      DateTime *end = DateTime_get_day_end (datetimeObj);
+
+      DateTime *end = DateTime_get_day_end (datetimeObj, tz);
+
       DateTime *events[4];
       MoonTimes_get_moon_rises (workingLatlong, start, end, 
         15 * 60, events, 4, &nevents);

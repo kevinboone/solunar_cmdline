@@ -4,7 +4,7 @@
 <h1>Solunar - a simple command-line utility for calculating Sun and Moon 
 rise and set, and related times</h1>
 
-Version 0.1.3
+Version 0.1.3a
 <p/>
 
 <code>solunar</code> is a simple, command-line utility for rapidly displaying
@@ -70,7 +70,8 @@ Get more detailed information:
 
 
 Get brief information for location 51.0 degrees north, 1.5 degrees west,
-with times appropriate for the default timezone (see note below): 
+with times appropriate for the "syslocal" timezone (see 
+'Note on timezones' below): 
 
 
 <pre style="background-color: #FFFFD0; padding: 5px">
@@ -84,9 +85,9 @@ run <code>solunar -l help</code>.
 When a city name is given using the <code>-c</code> switch, the times
 displayed are local to the timezone in which that city is located.
 When latitude and longitude are given alone, then times displayed
-are in the <i>default timezone</i>. The defauult timezone will either be
-UTC (GMT), or the timezone set in the TZ environment variable, if there is one. 
-The default timezone will be used whether or not the specified location
+are in the syslocal timezone -- usually the timezone set in
+the TZ environment variable, or UTC if no timezone is set.
+The syslocal timezone will be used whether or not the specified location
 happens to be in that timezone --
 this may well be unhelpful if you need to know the
 times local to that location, when you are in another, different location. 
@@ -97,7 +98,7 @@ for a lat/long location, give the
 in the required timezone.  For
 example, the city database has no entry for Washington, DC. The following 
 command specifies the Washington DC lat/long coordinates, but displays
-the results for the default timezone:
+the results for the syslocal timezone:
 
 <pre style="background-color: #FFFFD0; padding: 5px">
 <b>solunar -l 38.90,-77.03</b>
@@ -110,10 +111,6 @@ local times for Washington, DC:
 <pre style="background-color: #FFFFD0; padding: 5px">
 <b>solunar -l 38.90,-77.03 -c New_York</b>
 </pre>
-<p/>
-If you know that the specified lat/long location is in the same timezone
-as your computer (and assuming that the computer is set up correctly)
-you can display times relative to the system local time:
 
 <pre style="background-color: #FFFFD0; padding: 5px">
 <b>solunar -l 38.90,-77.03 --syslocal</b>
@@ -243,6 +240,116 @@ There is little science to solunar scoring. The program's algorithm
 has been tuned to give results that are broadly comparable with
 several published almanacs that claim to offer such scoring.
 
+
+<h3>Notes on the calculations</h3>
+
+With the exception of solunar scoring, the calculations are all based 
+on published algorithms, and I have checked
+them against reliable data sources so far as possible. There are
+potential sources of error that the program can't control, and some
+issues of interpretation.
+<p/>
+The most troublesome potential source of error is the system's timezone
+database. By default, results are worked out in UTC and then converted to
+the local time of the specified city. This relies on the system's own
+time and date being correct, and having a proper understanding of daylight 
+savings changes. In general, these issues seems to be handled reasonably well
+in modern Linux distributions, but there's not much <code>solunar</code> can
+do if the platform data is incorrect.
+<p/>
+Issues of interpretation include those relating to uncertainty about exactly 
+what position of the sun in the sky constitutes sunset (and similar
+considerations for the moon.)
+The sun is not a uniform disc, so there has to be a convention for the
+angle of zenith that we take as sunset. Most publications that give sunset
+times seem to take the Zenith angle as 90 degrees and 50 minutes, so 
+<code>solunar</code> does the same. However, the <code>--full</code> switch
+will make it display sunset according to other popular zeniths.
+In particular, civil twilight has a zenith 6 degrees below conventional
+sunset, and denotes the time before which outdoor activities are reasonably
+practicable. Nautical and astonomical twilight have zeniths 12 and 18 degrees
+below conventional sunset. In practice, many parts of the world will experience
+no astronomical sunset for at least part of the year. Some, of course,
+experience no sunset at all for part of the year. 
+<p/>
+Although there will always be at most one sunset on a given day, and
+one sunrise, there can be zero, one, or two moonrises and sets. So to
+capture all these events we have to consider the position of the moon
+at a series of time intervals, and then determine the horizon-crossing
+points, interpolating if necessary (at least, I have not been able to
+find a better way to do this). This means that there is even more scope
+for disagreement in lunar event times than solar events. Published
+sources seem to vary by +/- ten minutes or so.
+<p/>
+Solunar scoring -- estimating the influence of sun and moon on wildlife
+activity -- is highly speculative, with little scientific justification.
+The algorithms used by <code>solunar</code> for this purpose are not
+based on any particular science -- there isn't any -- but have been 
+tuned to produce output that is broadly comparable with other published
+solunar tables.  
+
+<h3>A note on timezones</h3>
+
+There are three timezones that are of potential interest to the
+<code>solunar</code> program:
+<ul>
+<li>The timezone in which the host computer believes it 
+is located (which 
+<code>solunar</code> refers to as the "syslocal" timezone);</li>
+<li>The UTC (GMT) timezone, in which all calculations are carried out; and </li>
+<li>The timezone of some selected location (<code>solunar</code> refers
+to this as the "local" timezone, and is distinct from the syslocal
+timezone).</li>
+</ul>
+
+In general, if a particular city is selected (<code>-c</code> switch),
+then the timezone of that city is used both to parse input dates,
+and to adjust output times to that location. If the <code>--utc</code>
+switch is given, then input and output are UTC times. If <code>--syslocal</code>
+is given, then input and output will be system local, including allowance for
+daylight savings, even if a city is specified. So, for example,
+using <code>-c</code> and <code>--syslocal</code> together allow 
+<code>solunar</code> to answer questions like "What time is it
+here, when it is sunset in Paris?<.
+<p/>
+If no city is specified, but only a location (latitude/longitude),
+then input and output will be system local, unless <code>--utc</code>
+is specified. 
+<p/>
+Internally, "syslocal" is interpreted as meaning "apply no particular
+timezone converion beyond what the algorithms insist on." The results
+are platform-dependent to some extent but, in practice, both Linux
+and Cygwin both take the working timezone from the <code>TZ</code>
+environment variable, if it is set, or the file <code>/etc/localtime</code>
+if it exists, or UTC if neither is present.
+
+<h3>Limitations</h3>
+
+<ul>
+<li>Events like equinoxes are displayed to the nearest minute but, in fact, 
+it's hard to get an accuracy of better than 30 minutes or so. These are
+annual events, after all. </li>
+<li>The --days switch produces a list for the current year. To get a list for a
+different year, you will need to specify a full date in that year, even though
+only the year part will be used. The times shown for events that have
+a time (equinoxes, for example) will be system-local unless you
+specify a city (<code>-c</code>) or specify UTC times (<code>--utc</code>).</li>
+<li><code>solunar</code> will tell you what time it currently is in a different location if you specify a city, but it won't tell you (for example) 
+what UK time corresponds to 9:30 AM in Los Angeles -- it is not intended 
+to be a general timezone converter.</li>
+<li>If a date is specified but no time, then the time is taken to be 2AM.
+So, for example, the distance from the earth to the moon will be given at
+2AM on the specificed day. In practice, this seems highly unlikely to be
+significant. The use of 2AM, rather than midnight should reduce the likelihood
+of a nasty surprise 
+when selecting a day at the boundary between daylight
+savings changes: midnight local time might end up being in an unexpected
+day.</li>
+<li><code>solunar</code> has no Unix/Linux <code>man</code> page as yet --
+vounteers to write one are most welcome.</li>
+</ul>
+
+
 <h3>Compiling</h3>
 
 Source code is available from <a href="https://github.com/kevinboone/solunar_cmdline" target="_blank">github</a>. You can check out the latest version,
@@ -264,65 +371,6 @@ alternative <code>Makefile.OSX</code>. <code>solunar</code> may build
 on other Posix-like plaforms, perhaps with changes to the Makefile. 
 
 
-
-<h3>Notes on the calculations</h3>
-
-With the exception of solunar scoring, the calculations are all based 
-on published algorithms, and I have checked
-them against reliable data sources so far as possible. There are
-potential sources of error that the program can't control, and some
-issues of interpretation.
-<p/>
-The most troublesome potential source of error is the system's timezone
-database. By default, results are worked out in UTC and then converted to
-the local time of the specified city. This relies on the system's own
-time and date being correct, and having a proper understanding of daylight 
-savings changes. In general, these issues seems to be handled reasonably well
-in modern Linux distributions, but there's not much <code>solunar</code> can
-do if the platform data is incorrect.
-<p/>
-Issues of interpretation include those relating to uncertainty about exactly 
-what position of the sun in the sky constitutes sunset.
-The sun is not a uniform disc, so there has to be a convention for the
-angle of zenith that we take as sunset. Most publications that give sunset
-times seem to take the Zenith angle as 90 degrees and 50 minutes, so 
-<code>solunar</code> does the same. However, the <code>--full</code> switch
-will make it display sunset according to other popular zeniths.
-In particular, civil twilight has a zenith 6 degrees below conventional
-sunset, and denotes the time before which outdoor activities are reasonably
-practicable. Nautical and astonomical twilight have zeniths 12 and 18 degrees
-below conventional sunset. In practice, many parts of the world will experience
-no astronomical sunset for at least part of the year. Some, of course,
-experience no sunset at all for part of the year. 
-<p/>
-Solunar scoring -- estimating the influence of sun and moon on wildlife
-activity -- is highly speculative, with little scientific justification.
-The algorithms used by <code>solunar</code> for this purpose are not
-based on any particular science -- there isn't any -- but have been 
-tuned to produce output that is broadly comparable with other published
-solunar tables.  
-
-<h3>Limitations</h3>
-
-<ul>
-<li>Events like equinoxes are displayed to the nearest minute but, in fact, 
-it's hard to get an accuracy of better than 30 minutes or so. These are
-annual events, after all. </li>
-<li>The --days switch produces a list for the current year. To get a list for a
-different year, you will need to specify a full date in that year, even though
-only the year part will be used. </li>
-<li><code>solunar</code> will tell you what time it currently is in a different location if you specify a city, but it won't tell you (for example) 
-what UK time corresponds to 9:30 AM in Los Angeles -- it is not intended 
-to be a general timezone converter.</li>
-<li>If a date is specified but no time, then the time is taken to be 2AM, local
-time. So, for example, the distance from the earth to the moon will be given at
-2AM on the specificed day. In practice, this seems highly unlikely to be
-significant. The use of 2AM, rather than midnight should reduce the likelihood
-of a nasty surprise 
-when selecting a day at the boundary between daylight
-savings changes: midnight local time might end up being in an unexpected
-day.</li>
-</ul>
 
 <h3>Legal</h3>
 
@@ -357,16 +405,28 @@ Corrected some errors in the documentation.
 
 Fixed a problem with timezone handling that caused the wrong day to be
 used between midnight and 1AM during daylight savings time.
+<p/> 
  
 
 <b>Version 0.1.2a, March 2015</b><br/>
 
 Fixed bug in name parsing in parse_zoneinfo.pl (thanks to Cezary Kruk)
- 
+<p/> 
 
 <b>Version 0.1.3, January 2016</b><br/>
 
 Added <code>--syslocal</code> switch; various bug fixes.
+<p/> 
+
+<b>Version 0.1.3a, January 2016</b><br/>
+
+Fixed a bug in working out when a day started and ended, that affected
+mostly pacific timezones. Tidied up the display of the "Today" 
+date. Made system local the default timezone for situations where
+a location (lat/long) is given, but no city -- this seems to be
+what users prefer.
+<p/> 
+
 
 <h3>See also</h3>
 

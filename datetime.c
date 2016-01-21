@@ -209,7 +209,8 @@ DateTime *DateTime_new_parse (const char *str, Error **error, const char *tz,
     //unmy_setenv ("TZ");
     }
 
-  return DateTime_new_utime (utime);
+  DateTime *dt = DateTime_new_utime (utime);
+  return dt;
   }
 
 /*=======================================================================
@@ -274,16 +275,64 @@ DateTime *DateTime_new_today (void)
 
 
 /*=======================================================================
-DateTime_date_to_string
+DateTime_date_to_string_syslocal
 Caller must free string
 =======================================================================*/
-char *DateTime_date_to_string (const DateTime *self)
+char *DateTime_date_to_string_syslocal (const DateTime *self)
   {
   struct tm *tm = localtime(&(self->priv->utime));
   char s[100];
   strftime (s, sizeof (s), "%A %e %B %Y", tm);
   return strdup (s);
   }
+
+
+/*=======================================================================
+DateTime_date_to_string_syslocal
+Caller must free string
+=======================================================================*/
+char *DateTime_date_to_string_local (const DateTime *self, const char *tz)
+  {
+  char *oldtz = NULL;
+  if (tz)
+    {
+    oldtz = getenv_dup ("TZ");
+    my_setenv ("TZ", tz, 1);
+    tzset ();
+    }
+  struct tm *tm = localtime(&(self->priv->utime));
+  char s[100];
+  strftime (s, sizeof (s), "%A %e %B %Y", tm);
+  if (s[strlen(s) - 1] == 10) s[strlen(s) - 1] = 0;
+
+  if (tz)
+    {
+    //if (oldtz)
+      {
+      my_setenv ("TZ", oldtz, 1);
+      if (oldtz) free (oldtz);
+      tzset ();
+      }
+    //unmy_setenv ("TZ");
+    }
+  return strdup (s);
+  }
+
+
+
+
+/*=======================================================================
+DateTime_date_to_string_utc
+Caller must free string
+=======================================================================*/
+char *DateTime_date_to_string_UTC (const DateTime *self)
+  {
+  struct tm *tm = gmtime(&(self->priv->utime));
+  char s[100];
+  strftime (s, sizeof (s), "%A %e %B %Y", tm);
+  return strdup (s);
+  }
+
 
 /*=======================================================================
 DateTime_to_string_local
@@ -419,6 +468,8 @@ char *DateTime_time_to_string_local (const DateTime *self, const char *tz,
       tm->tm_hour >= 12 ? "pm": "am");
     }
   else
+    //snprintf (s, sizeof (s), "%02d:%02d", tm->tm_hour, tm->tm_min);
+    //snprintf (s, sizeof (s), "%02d:%02d %d/%d", tm->tm_hour, tm->tm_min, tm->tm_mday, tm->tm_mon + 1);
     snprintf (s, sizeof (s), "%02d:%02d", tm->tm_hour, tm->tm_min);
   if (tz)
     {
@@ -562,22 +613,21 @@ Caller must free result
 Get midnight on the day in which this datetime falls
 Umm... I'm not sure if we should take DST into account here
 =======================================================================*/
-DateTime *DateTime_get_day_start (const DateTime *self)
+DateTime *DateTime_get_day_start (const DateTime *self, const char *tz)
   {
-  struct tm tm;
-  memcpy (&tm, gmtime (&self->priv->utime), sizeof (struct tm));
-  tm.tm_hour = 0;
-  tm.tm_min = 0;
-  tm.tm_sec = 0;
-
   char *oldtz = NULL;
-  char *tz = "UTC0";
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
     my_setenv ("TZ", tz, 1);
     tzset ();
     }
+
+  struct tm tm;
+  memcpy (&tm, localtime (&self->priv->utime), sizeof (struct tm));
+  tm.tm_hour = 0;
+  tm.tm_min = 0;
+  tm.tm_sec = 0;
 
   time_t utime = mktime (&tm);
 
@@ -592,7 +642,9 @@ DateTime *DateTime_get_day_start (const DateTime *self)
     //unmy_setenv ("TZ");
     }
 
-  return DateTime_new_utime (utime);
+  DateTime *dt = DateTime_new_utime (utime);
+
+  return dt;
   }
 
 
@@ -601,22 +653,21 @@ DateTime_get_day_end
 Caller must free result
 Get 23:59:59 on the day in which this datetime falls
 =======================================================================*/
-DateTime *DateTime_get_day_end (const DateTime *self)
+DateTime *DateTime_get_day_end (const DateTime *self, const char *tz)
   {
-  struct tm tm;
-  memcpy (&tm, gmtime (&self->priv->utime), sizeof (struct tm));
-  tm.tm_hour = 23;
-  tm.tm_min = 59;
-  tm.tm_sec = 59;
-
   char *oldtz = NULL;
-  char *tz = "UTC0";
   if (tz)
     {
     oldtz = getenv_dup ("TZ");
     my_setenv ("TZ", tz, 1);
     tzset ();
     }
+
+  struct tm tm;
+  memcpy (&tm, localtime (&self->priv->utime), sizeof (struct tm));
+  tm.tm_hour = 23;
+  tm.tm_min = 59;
+  tm.tm_sec = 59;
 
   time_t utime = mktime (&tm);
 
@@ -631,7 +682,8 @@ DateTime *DateTime_get_day_end (const DateTime *self)
     //unmy_setenv ("TZ");
     }
 
-  return DateTime_new_utime (utime);
+  DateTime *dt = DateTime_new_utime (utime);
+  return dt;
   }
 
 

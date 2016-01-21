@@ -48,13 +48,15 @@ char *DateTime_time_to_string_syslocal (const DateTime *self,
 double DateTime_get_julian_date (const DateTime *self);
 double DateTime_get_modified_julian_date (const DateTime *self);
 
-DateTime *DateTime_get_day_start (const DateTime *self);
-DateTime *DateTime_get_day_end (const DateTime *self);
+DateTime *DateTime_get_day_start (const DateTime *self, const char *tz);
+DateTime *DateTime_get_day_end (const DateTime *self, const char *tz);
 
 long DateTime_seconds_difference (const DateTime *start, const DateTime *end);
 void DateTime_add_seconds (DateTime *self, long seconds);
 
-char *DateTime_date_to_string (const DateTime *self);
+char *DateTime_date_to_string_syslocal (const DateTime *self);
+char *DateTime_date_to_string_local (const DateTime *self, const char *tz);
+char *DateTime_date_to_string_UTC (const DateTime *self);
 
 void DateTime_set_name (const DateTime *self, const char *name);
 const char* DateTime_get_name (const DateTime *self);
