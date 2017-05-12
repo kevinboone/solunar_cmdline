@@ -24,7 +24,8 @@ cityinfo.h: /usr/share/zoneinfo/zone.tab parse_zoneinfo.pl
 	./parse_zoneinfo.pl
 
 install:
-	cp -p solunar /usr/bin
+	mkdir -p $(DESTDIR)/usr/bin
+	cp -p solunar $(DESTDIR)/usr/bin/
 
 web: clean
 	(cd ..; tar cvfz /home/kevin/docs/kzone5/target/solunar-${VERSION}.tar.gz solunar-0.1)
