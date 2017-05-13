@@ -3,19 +3,20 @@
 
 all: solunar
 
-VERSION=0.1.3a
+VERSION=0.1.3b
 
-CFLAGS=-Wall -DVERSION=\"$(VERSION)\" -g 
+MYCFLAGS=-Wall -DVERSION=\"$(VERSION)\" $(CFLAGS)
+MYLDFLAGS=$(LDFLAGS)
 
-GCC=gcc
+CC=gcc
 
 OBJS=main.o city.o pointerlist.o error.o latlong.o datetime.o suntimes.o roundutil.o trigutil.o timeutil.o moontimes.o mathutil.o holidays.o astrodays.o nameddays.o solunar.o
 
 solunar: $(OBJS)
-	$(GCC)  -s -o solunar $(OBJS) -lm
+	$(CC) $(MYLDFLAGS)  -s -o solunar $(OBJS) -lm
 
 .c.o:
-	$(GCC) $(CFLAGS) -o $*.o -c $*.c
+	$(CC) $(MYCFLAGS) -o $*.o -c $*.c
 
 clean:
 	rm -f *.o solunar
