@@ -271,7 +271,7 @@ DateTime *SunTimes_get_sunset (const LatLong *latlong,
   {
   int dayOfYear = DateTime_get_day_of_year(date, tz);
   double sunMeanAnomaly = suntimes_getMeanAnomaly (dayOfYear, 
-    LatLong_get_longitude (latlong), TYPE_SUNRISE);  
+    LatLong_get_longitude (latlong), TYPE_SUNSET);  
   double sunTrueLong = suntimes_getSunTrueLongitude (sunMeanAnomaly);
   double sunRightAscensionHours = suntimes_getSunRightAscensionHours (sunTrueLong);
   double cosLocalHourAngle = suntimes_getCosLocalHourAngle (sunTrueLong, 
