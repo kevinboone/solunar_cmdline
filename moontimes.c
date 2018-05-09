@@ -254,7 +254,7 @@ void MoonTimes_get_moon_rises (const LatLong *latlong,
        DateTime *events[], int max_events, int *nevents)
 {
   long seconds_difference = DateTime_seconds_difference (start, end); 
-  int npoints = seconds_difference / interval;
+  int npoints = seconds_difference / interval + 2;
 
   double *x = (double *) malloc (npoints * sizeof (double));
   double *y = (double *) malloc (npoints * sizeof (double));
@@ -270,6 +270,7 @@ void MoonTimes_get_moon_rises (const LatLong *latlong,
     x[i] = i * interval;
     y[i] = alt;
     DateTime_add_seconds (tx, interval); 
+    printf ("%G\n", alt);
   }
 
   // Note that x values are in seconds relative to 00:00 on the day
@@ -305,7 +306,7 @@ void MoonTimes_get_moon_sets (const LatLong *latlong,
        DateTime *events[], int max_events, int *nevents)
 {
   long seconds_difference = DateTime_seconds_difference (start, end); 
-  int npoints = seconds_difference / interval;
+  int npoints = seconds_difference / interval + 1;
 
   double *x = (double *) malloc (npoints * sizeof (double));
   double *y = (double *) malloc (npoints * sizeof (double));
