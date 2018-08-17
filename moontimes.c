@@ -270,7 +270,6 @@ void MoonTimes_get_moon_rises (const LatLong *latlong,
     x[i] = i * interval;
     y[i] = alt;
     DateTime_add_seconds (tx, interval); 
-    printf ("%G\n", alt);
   }
 
   // Note that x values are in seconds relative to 00:00 on the day
