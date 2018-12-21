@@ -14,11 +14,12 @@ information from methods in holidays.c and astrodays.c
 /*=======================================================================
 NamedDays_get_list_for_year 
 =======================================================================*/
-PointerList *NamedDays_get_list_for_year (int year, const char *tz, BOOL utc)
+PointerList *NamedDays_get_list_for_year (int year, const char *tz, BOOL utc,
+    BOOL southern)
   {
   PointerList *l = NULL;
   l = Holidays_get_list_for_year (l, year, tz, utc);
-  l = AstroDays_get_list_for_year (l, year, tz, utc);
+  l = AstroDays_get_list_for_year (l, year, tz, utc, southern);
   return l;
   }
 

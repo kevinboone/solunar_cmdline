@@ -7,5 +7,6 @@ nameddays.h
 #include "defs.h"
 #include "pointerlist.h"
 
-PointerList *NamedDays_get_list_for_year (int year, const char *tz, BOOL utc);
+PointerList *NamedDays_get_list_for_year (int year, const char *tz, BOOL utc,
+  BOOL southern);
 

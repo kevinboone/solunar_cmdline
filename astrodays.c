@@ -86,11 +86,16 @@ DateTime *AstroDays_get_autumnal_equinox (int year)
 /*=======================================================================
 AstroDays_get_winter_solstice
 =======================================================================*/
-DateTime *AstroDays_get_winter_solstice (int year)
+DateTime *AstroDays_get_winter_solstice (int year, BOOL southern)
   {
   double m = (year - 2000.0) / 1000.0;
-  double ws = 2451900.05952 + 365242.74049 * m - 0.06223 * m 
-    * m - 0.00823 * m * m * m + 0.00032 * m * m * m * m ;
+  double ws;
+  if (southern)
+    ws = 2451716.56767 + 365241.62603 * m + 0.00325 * m 
+      * m + 0.00888 * m * m * m - 0.00030 * m * m * m * m ;
+  else
+    ws = 2451900.05952 + 365242.74049 * m - 0.06223 * m 
+      * m - 0.00823 * m * m * m + 0.00032 * m * m * m * m ;
   double t = (ws - 2451545.0) / 36525.0;
   double w = 35999.373*t - 2.47;
   double dL = 1 + 0.0334*cosDeg(w) + 0.0007*cosDeg(2*w);
@@ -106,10 +111,15 @@ DateTime *AstroDays_get_winter_solstice (int year)
 /*=======================================================================
 AstroDays_get_summer_solstice
 =======================================================================*/
-DateTime *AstroDays_get_summer_solstice (int year)
+DateTime *AstroDays_get_summer_solstice (int year, BOOL southern)
   {
   double m = (year - 2000.0) / 1000.0;
-  double ss = 2451716.56767 + 365241.62603 * m + 0.00325 * m 
+  double ss;
+  if (southern)
+     ss = 2451900.05952 + 365242.74049 * m - 0.06223 * m 
+      * m - 0.00823 * m * m * m + 0.00032 * m * m * m * m ;
+  else
+     ss = 2451716.56767 + 365241.62603 * m + 0.00325 * m 
       * m + 0.00888 * m * m * m - 0.00030 * m * m * m * m ;
   double t = (ss - 2451545.0) / 36525.0;
   double w = 35999.373*t - 2.47;
@@ -130,16 +140,16 @@ add the soltices and equinoxes for the specified year to the
 list.
 =======================================================================*/
 PointerList *AstroDays_get_list_for_year (PointerList *in, int year, 
-     const char *tz, BOOL utc)
+     const char *tz, BOOL utc, BOOL southern)
   {
   PointerList *l = in;
   DateTime *vernal_equinox = AstroDays_get_vernal_equinox (year);
   l = PointerList_append (l, vernal_equinox);
   DateTime *autumnal_equinox = AstroDays_get_autumnal_equinox (year);
   l = PointerList_append (l, autumnal_equinox);
-  DateTime *winter_solstice = AstroDays_get_winter_solstice (year);
+  DateTime *winter_solstice = AstroDays_get_winter_solstice (year, southern);
   l = PointerList_append (l, winter_solstice);
-  DateTime *summer_solstice = AstroDays_get_summer_solstice (year);
+  DateTime *summer_solstice = AstroDays_get_summer_solstice (year, southern);
   l = PointerList_append (l, summer_solstice);
 
   return l;

@@ -215,9 +215,16 @@ void print_high_noon_time (char *text, BOOL opt_utc, const char *tz,
 /*=======================================================================
 get_named_days_today
 =======================================================================*/
-PointerList *initialize_day_events (const char *tz, BOOL utc, int year)
+PointerList *initialize_day_events (const char *tz, BOOL utc, int year, 
+    const LatLong *latlong)
   {
-  return NamedDays_get_list_for_year (year, tz, utc);
+  BOOL southern = FALSE;
+  if (latlong)
+    {
+    if (LatLong_get_latitude (latlong) < 0)
+      southern = TRUE;
+    }
+  return NamedDays_get_list_for_year (year, tz, utc, southern);
   }
 
 /*=======================================================================
@@ -462,7 +469,7 @@ int main (int argc, char **argv)
 
   if (opt_version)
     {
-    printf ("solunar version %s\nCopyright (c)2005-2016 Kevin Boone\n", VERSION);
+    printf ("solunar version %s\nCopyright (c)2005-2018 Kevin Boone\n", VERSION);
     exit (0);
     }
   
@@ -613,7 +620,7 @@ int main (int argc, char **argv)
     int year, dummy;
     DateTime_get_ymdhms (datetimeObj, &year, &dummy, &dummy, &dummy, 
       &dummy, &dummy, tz, opt_utc);
-    day_events = initialize_day_events (tz, opt_utc, year);
+    day_events = initialize_day_events (tz, opt_utc, year, workingLatlong);
     }
 
 

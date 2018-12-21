@@ -241,6 +241,8 @@ City cities[] = {
 {
 "America/Santiago","CL",33,27,TRUE,70,40,TRUE},
 {
+"America/Punta_Arenas","CL",53,9,TRUE,70,55,TRUE},
+{
 "Pacific/Easter","CL",27,9,TRUE,109,26,TRUE},
 {
 "Africa/Douala","CM",4,3,FALSE,9,42,FALSE},
@@ -262,6 +264,8 @@ City cities[] = {
 "Indian/Christmas","CX",10,25,TRUE,105,43,FALSE},
 {
 "Asia/Nicosia","CY",35,10,FALSE,33,22,FALSE},
+{
+"Asia/Famagusta","CY",35,7,FALSE,33,57,FALSE},
 {
 "Europe/Prague","CZ",50,5,FALSE,14,26,FALSE},
 {
@@ -395,7 +399,7 @@ City cities[] = {
 {
 "Europe/Rome","IT",41,54,FALSE,12,29,FALSE},
 {
-"Europe/Jersey","JE",49,12,FALSE,2,7,TRUE},
+"Europe/Jersey","JE",49,11,FALSE,2,6,TRUE},
 {
 "America/Jamaica","JM",17,58,FALSE,76,47,TRUE},
 {
@@ -434,6 +438,8 @@ City cities[] = {
 "Asia/Aqtobe","KZ",50,17,FALSE,57,10,FALSE},
 {
 "Asia/Aqtau","KZ",44,31,FALSE,50,16,FALSE},
+{
+"Asia/Atyrau","KZ",47,7,FALSE,51,56,FALSE},
 {
 "Asia/Oral","KZ",51,13,FALSE,51,21,FALSE},
 {
@@ -479,7 +485,7 @@ City cities[] = {
 {
 "Africa/Bamako","ML",12,39,FALSE,8,0,TRUE},
 {
-"Asia/Rangoon","MM",16,47,FALSE,96,10,FALSE},
+"Asia/Yangon","MM",16,47,FALSE,96,10,FALSE},
 {
 "Asia/Ulaanbaatar","MN",47,55,FALSE,106,53,FALSE},
 {
@@ -617,11 +623,15 @@ City cities[] = {
 {
 "Europe/Volgograd","RU",48,44,FALSE,44,25,FALSE},
 {
+"Europe/Kirov","RU",58,36,FALSE,49,39,FALSE},
+{
 "Europe/Astrakhan","RU",46,21,FALSE,48,3,FALSE},
 {
-"Europe/Samara","RU",53,12,FALSE,50,9,FALSE},
+"Europe/Saratov","RU",51,34,FALSE,46,2,FALSE},
 {
 "Europe/Ulyanovsk","RU",54,20,FALSE,48,24,FALSE},
+{
+"Europe/Samara","RU",53,12,FALSE,50,9,FALSE},
 {
 "Asia/Yekaterinburg","RU",56,51,FALSE,60,36,FALSE},
 {
@@ -630,6 +640,8 @@ City cities[] = {
 "Asia/Novosibirsk","RU",55,2,FALSE,82,55,FALSE},
 {
 "Asia/Barnaul","RU",53,22,FALSE,83,45,FALSE},
+{
+"Asia/Tomsk","RU",56,30,FALSE,84,58,FALSE},
 {
 "Asia/Novokuznetsk","RU",53,45,FALSE,87,7,FALSE},
 {
@@ -689,7 +701,7 @@ City cities[] = {
 {
 "America/Paramaribo","SR",5,50,FALSE,55,10,TRUE},
 {
-"Africa/Juba","SS",4,51,FALSE,31,36,FALSE},
+"Africa/Juba","SS",4,51,FALSE,31,37,FALSE},
 {
 "Africa/Sao_Tome","ST",0,20,FALSE,6,44,FALSE},
 {
@@ -740,8 +752,6 @@ City cities[] = {
 "Europe/Zaporozhye","UA",47,50,FALSE,35,10,FALSE},
 {
 "Africa/Kampala","UG",0,19,FALSE,32,25,FALSE},
-{
-"Pacific/Johnston","UM",16,45,FALSE,169,31,TRUE},
 {
 "Pacific/Midway","UM",28,13,FALSE,177,22,TRUE},
 {
@@ -805,7 +815,7 @@ City cities[] = {
 {
 "Pacific/Honolulu","US",21,18,FALSE,157,51,TRUE},
 {
-"America/Montevideo","UY",34,53,TRUE,56,11,TRUE},
+"America/Montevideo","UY",34,54,TRUE,56,12,TRUE},
 {
 "Asia/Samarkand","UZ",39,40,FALSE,66,48,FALSE},
 {
