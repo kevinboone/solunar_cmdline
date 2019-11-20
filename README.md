@@ -1,7 +1,7 @@
 <h1>Solunar - a simple command-line utility for calculating Sun and Moon 
 rise and set, and related times</h1>
 
-Version 0.1.3b
+Version 0.1.3d
 <p/>
 
 <code>solunar</code> is a simple, command-line utility for rapidly displaying
@@ -134,6 +134,19 @@ For a full list of command-line switches:
 <pre style="background-color: #FFFFD0; padding: 5px">
 <b>solunar --longhelp</b>
 </pre>
+
+<h3> RC file</h3>
+
+If the file $HOME/.solunar.rc exists, it will be read for configuration.
+Values set in the file can be overridden by the command line. At present,
+the only configuration that is read is
+<p>
+<pre style="background-color: #FFFFD0; padding: 5px">
+<b>city=something</b>
+</pre>
+
+Setting a city this way allows <code>solunar</code> to be run without
+arguments, to get today's timings.
 
 <h3>Useful switches</h3>
 
@@ -355,15 +368,17 @@ Then the usual:
 
 <pre>
 % make
-# make install
+% sudo make install
 </pre>
 
 Note that <code>solunar</code> uses GNU-cc specific methods of handling
-time and date, and requires a Posix timezone database. Consequently it
+time and date. Consequently it
 won't build under MinGW (and won't work even if it can be made to build).
 Interestingly it <i>will</i> build for Android using the Native Development
-Kit, and does seem to work correctly. Of course, that's only useful if you
-routinely use the command prompt on Android. For OS/X, please use the
+Kit, and does seem to work correctly. It will also build <i>on</i> an
+Android device that has a GCC compiler. Of course, this is only useful if you
+routinely use the command prompt on Android. For OS/X, you might need
+to use the
 alternative <code>Makefile.OSX</code>. <code>solunar</code> may build
 on other Posix-like plaforms, perhaps with changes to the Makefile. 
 
@@ -371,8 +386,8 @@ on other Posix-like plaforms, perhaps with changes to the Makefile.
 
 <h3>Legal</h3>
 
-<code>solunar</code> is copyright (c)2005-2016 Kevin Boone, and is released
-under the GNU Public Licence, version 2.0. That means, essentially, that
+<code>solunar</code> is copyright (c)2005-2019 Kevin Boone, and is released
+under the GNU Public Licence, version 3.0. That means, essentially, that
 you are welcome to use this program however you see fit, at your own risk, so
 long as you do not redistribute it without acknowledging the original
 author.
@@ -437,13 +452,11 @@ Fixed summer/winter naming to depend on hemisphere of selected location.
 <p/> 
 
 
-<h3>See also</h3>
+<b>Version 0.1.3d, November 2019</b><br/>
 
-An <a href="README_android_suntimes.html">Android app</a> 
-is available which displays a subset
-of the data producted by this program, and is based on the same
-algorithms.
-<p>
+Preliminary RC file support. Tidied up some printf() usages that
+caused complaints from modern GCC versions.
+<p/> 
 
 
 <h3>Downloads</h3>
@@ -454,15 +467,6 @@ source.
 Please note that the latest source will nearly alway be 
 more recent than any pre-built binaries, and include the latest bug
 fixes, some of which are important.
-
-<ul>
-<li><a href="solunar.exe">Windows (Cygwin) binary of version 0.1.2</a></li>
-<li>A command line version for Android is available from the
- <a href="kbox3_downloads.html">KBOX downloads</a> page</li>
-<li>Source code is available from <a href="https://github.com/kevinboone/solunar_cmdline" target="_blank">github</a></li>
-</ul>
-
-
 
 
 

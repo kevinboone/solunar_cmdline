@@ -3,7 +3,7 @@
 
 all: solunar
 
-VERSION=0.1.3c
+VERSION=0.1.3d
 
 MYCFLAGS=-Wall -DVERSION=\"$(VERSION)\" $(CFLAGS)
 MYLDFLAGS=$(LDFLAGS)
@@ -21,18 +21,16 @@ solunar: $(OBJS)
 clean:
 	rm -f *.o solunar
 
+# Uncomment these lines if you want to parse zone.tab into a more
+# up-to-date cityinfo.h. And, if your system have a zone.tab. And if you
+# have perl. The included data should be OK for most purposes.
+
 #cityinfo.h: /usr/share/zoneinfo/zone.tab parse_zoneinfo.pl
 #	./parse_zoneinfo.pl
 
 install:
 	mkdir -p $(DESTDIR)/usr/bin
 	cp -p solunar $(DESTDIR)/usr/bin/
-
-web: clean
-	(cd ..; tar cvfz /home/kevin/docs/kzone5/target/solunar-${VERSION}.tar.gz solunar-0.1)
-	cp README_solunar.html /home/kevin/docs/kzone5/source/
-	(cd /home/kevin/docs/kzone5; ./make.pl solunar)
-		
 
 include dependencies.mak
 

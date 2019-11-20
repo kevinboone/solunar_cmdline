@@ -1,7 +1,7 @@
 /*=======================================================================
 solunar
 main.c
-Copyright (c)2005-2012 Kevin Boone
+Copyright (c)2005-2019 Kevin Boone
 =======================================================================*/
 #include <stdio.h>
 #include <getopt.h>
@@ -469,7 +469,8 @@ int main (int argc, char **argv)
 
   if (opt_version)
     {
-    printf ("solunar version %s\nCopyright (c)2005-2018 Kevin Boone\n", VERSION);
+    printf ("solunar version %s\nCopyright (c)2005-2019 Kevin Boone\n", VERSION);
+    printf ("Distributed under the terms of the GNU Public Licence, v3.0\n");
     exit (0);
     }
   
