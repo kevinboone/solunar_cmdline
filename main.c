@@ -279,11 +279,11 @@ void list_named_days (PointerList *day_events, const DateTime *start,
         int j;
         const char *name = DateTime_get_name (event);
         char *s = DateTime_date_to_string_syslocal (event);
-        printf (s);
+        printf ("%s", s);
         putchar (' ');
         for (j = strlen (s); j < 26; j++) 
           putchar (' ');
-        printf (name);
+        printf ("%s", name);
         int dummy, hour, min, sec;
         DateTime_get_ymdhms (event, &dummy, &dummy, &dummy, &hour,
           &min, &sec, tz, utc);
@@ -500,6 +500,41 @@ int main (int argc, char **argv)
     exit (-1);
     }
   
+  // Parse RC file, if there is one. Note that command-line settings
+  //   should override file settings, and the command-line has been
+  //   parse by this point.
+  char *home = getenv ("HOME");
+  if (home)
+    {
+    char rc_file[512];
+    snprintf (rc_file, sizeof (rc_file) - 1,
+      "%s/.solunar.rc", home);
+    FILE *f = fopen (rc_file, "r");
+    if (f)
+      {
+      while (!feof (f))
+        {
+        char line[256];
+	fgets (line, sizeof (line) - 1, f);
+	if (line[strlen(line) - 1] == '\n')
+          line[strlen(line) - 1] = 0;
+        char *p = strchr (line, '=');
+        if (p)
+          {
+          *p = 0;
+          const char *key = line;
+          const char *value = p+1;
+          if (strcmp (key, "city") == 0 && !city)
+            {
+            city = strdup (value);
+            }
+          }
+	}
+      fclose (f);
+      }
+    } 
+
+
   if (city)
     {
     PointerList *cities = City_get_matching_name (city);
@@ -542,7 +577,7 @@ int main (int argc, char **argv)
     latlongObj = LatLong_new_parse (latlong, &error);
     if (error)
       {
-      fprintf (stderr, Error_get_message (error));
+      fprintf (stderr, "%s", Error_get_message (error));
       fprintf (stderr, "\n\"%s --latlong help\" for syntax.\n", argv[0]);
       Error_free (error);
       exit (-1);
@@ -605,7 +640,7 @@ int main (int argc, char **argv)
     datetimeObj = DateTime_new_parse (datetime, &e, tz, opt_utc);
     if (e)
       {
-      fprintf (stderr, Error_get_message (e));
+      fprintf (stderr, "%s", Error_get_message (e));
       fprintf (stderr, "\n\"%s --datetime help\" for syntax.\n", argv[0]);
       Error_free (e);
       free_day_events (day_events);
@@ -699,7 +734,7 @@ int main (int argc, char **argv)
         if (name)
           {
           if (i != 0) printf (", ");
-          printf (name);
+          printf ("%s", name);
           }
         DateTime_free (event);
         }

@@ -1,3 +1,2 @@
 For building on OSX, please use the alternative makefile Makefile.OSX if
-your C compiler complains about the absence of the "-s" switch. You may
-also need to change
+your C compiler complains about the absence of the "-s" switch. 

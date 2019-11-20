@@ -21,8 +21,8 @@ solunar: $(OBJS)
 clean:
 	rm -f *.o solunar
 
-cityinfo.h: /usr/share/zoneinfo/zone.tab parse_zoneinfo.pl
-	./parse_zoneinfo.pl
+#cityinfo.h: /usr/share/zoneinfo/zone.tab parse_zoneinfo.pl
+#	./parse_zoneinfo.pl
 
 install:
 	mkdir -p $(DESTDIR)/usr/bin

@@ -1,6 +1,3 @@
-<a href="software.html">&bull; Software</a>
-<a href="utility_corner.html">&bull; Utility corner</a>
-
 <h1>Solunar - a simple command-line utility for calculating Sun and Moon 
 rise and set, and related times</h1>
 
