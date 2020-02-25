@@ -84,7 +84,6 @@ void print_datetime_help()
 "The following date representations are understood: \n"
 "DD/MM/YYYY\n"
 "DD/MM\n"
-"DD/MM/YYYY\n"
 "month_name DD YYYY\n"
 "month_name DD\n"
 "DDD#YYYY            (day of year, 1-366; for use in scripts)\n"
