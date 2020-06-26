@@ -72,17 +72,20 @@ in degrees
 */
 double suntimes_getMeanAnomaly (int dayOfYear, double longitude, int type)
   {
-  return (0.9856 * suntimes_getApproxTimeDays
+  double ret = (0.9856 * suntimes_getApproxTimeDays
      (dayOfYear, suntimes_getHoursFromMeridian (longitude), type)) - 3.289;
+  return ret;
   }
 
 double suntimes_getApproxTimeDays 
      (int dayOfYear, double hoursFromMeridian, int type)
   {
+  double ret;
   if (type == TYPE_SUNRISE)
-    return dayOfYear + ((6.0 - hoursFromMeridian) / 24);
+    ret = dayOfYear + ((6.0 - hoursFromMeridian) / 24);
   else
-    return dayOfYear + ((18.0 - hoursFromMeridian) / 24);
+    ret = dayOfYear + ((18.0 - hoursFromMeridian) / 24);
+  return ret;
   }
 
 /**
@@ -276,7 +279,7 @@ DateTime *SunTimes_get_sunset (const LatLong *latlong,
   double sunRightAscensionHours = suntimes_getSunRightAscensionHours (sunTrueLong);
   double cosLocalHourAngle = suntimes_getCosLocalHourAngle (sunTrueLong, 
     LatLong_get_latitude (latlong), zenith);
-
+ 
   double localHourAngle;
   if (cosLocalHourAngle > 1 || cosLocalHourAngle < -1)
     {

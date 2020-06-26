@@ -1,6 +1,15 @@
 <h1>Solunar - a simple command-line utility for calculating Sun and Moon 
 rise and set, and related times</h1>
 
+* RETIRED *
+_Please note that this utility is obsolete, and I won't be developing it any_
+_further, or fixing any more bugs. I've started an entirely new implementation,_
+_which is avilable here:_
+
+https://github.com/kevinboone/solunar2
+
+_Thanks to everybody who tested and contributed to this version over the years._
+
 Version 0.1.3d
 <p/>
 
